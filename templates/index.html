@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-do List</title>
+    <link rel="stylesheet" href="../static/style.css">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #f3e8ff, #f8ecff);
+            font-family: "Poppins", sans-serif;
+            display: flex;
+            justify-content: center;
+            padding-top: 40px;
+        }
+
+        .box {
+            background: #ffffff;
+            border-radius: 25px;
+            padding: 25px;
+            width: 55%;
+            box-shadow: 0 5px 20px rgba(150, 120, 200, 0.25);
+            position: relative;
+            animation: floaty 4s ease-in-out infinite;
+        }
+
+        @keyframes floaty {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+
+        #heading {
+            background: #d7b4ff;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+            padding: 25px 20px;
+        }
+
+        #heading h1 {
+            margin: 8px 0 3px 0;
+            font-size: 30px;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(80, 0, 120, 0.4);
+        }
+
+
+        .item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #faf5ff;
+            margin: 8px 0;
+            padding: 12px 18px;
+            border-radius: 18px;
+            border: 1px solid #e3d4ff;
+            transition: transform 0.2s;
+        }
+
+        .item:hover { transform: scale(1.03); }
+
+        .task_name { color: #5a4786; font-size: 15px; }
+        .duedate { font-size: 12px; color: #7c6ba3; text-align: right; }
+        .overdue { color: #d85aa8; font-weight: 600; }
+        .notdue { color: #7b67a8; }
+
+        .item form,
+        form.item { display: flex; gap: 10px; }
+        form.item { justify-content: flex-start; }
+
+        /* ============ FIX KOTAK INPUT DI SINI ============ */
+        input[type="text"], input[type="date"] {
+            border: 1px solid #c7b6ff;
+            background: #fbf7ff;
+            padding: 6px 10px;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            height: 38px;  
+            box-sizing: border-box;
+        }
+
+        input[type="date"] {
+            width: 135px;
+            text-align: center;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus {
+            border-color: #b594ff;
+            box-shadow: 0 0 5px #d3c2ff;
+        }
+
+        button {
+            background: #b991f9;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 50px;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #a27be4;
+            transform: scale(1.15) rotate(8deg);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box" id="heading">
+        <h1>To-do List ✨</h1>
+        <h1>{{ today }}</h1>
+        <h1>Keep Going Forward!</h1>
+    </div>
+
+    <div class="box">
+
+        {% if leng == 0: %}
+            <p style="text-align: center; color:#7c6ba3;"> No Task Yet!</p>
+        {% else: %}
+            {% for item in list_items %}
+                <form action="/delete-item" method="POST">
+                    <div class="item">
+                        <input type="checkbox" name="checkbox" value="{{ item['id'] }}" onchange="this.form.submit()">
+                        <p class="task_name">{{ item.content }}</p>
+                        <p class="duedate {{ 'overdue' if item.overdue==True else 'notdue' }}">
+                            {{ item.due_date['day']}} / {{item.due_date['month']}} / {{item.due_date['year']}}<br>
+                            {{ 'Overdue!!' if item.overdue==True else 'Due' }}
+                        </p>
+                    </div>
+                </form>
+            {% endfor %}
+        {% endif %}
+
+        <form class="item" action="/" method="POST">
+            <input type="text" name="newItem" autocomplete="off" placeholder="Type task here..." required>
+            <input type="date" name="duedate" required>
+            <button type="submit">+</button>
+        </form>
+    </div>
+</body>
+</html>
