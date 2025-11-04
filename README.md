@@ -1,5 +1,4 @@
 # To-Do List Web App 📝✨
-"To-do list web with cute lilac touch"
 
 This is a simple To-Do List web application built using **Flask (Python)** and **HTML/CSS**.  
 The app allows users to add tasks with a due date, display them on the page, and mark them as completed.  
